@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Personal notes (not for public)
+ROADMAP.md
+01_the_scroll_illusion/article_draft.txt
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
