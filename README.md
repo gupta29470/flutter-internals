@@ -19,9 +19,9 @@ Built a virtualized list from zero — first with fixed heights (simple math), t
 ### Demo
 
 <p align="center">
-  <img src="flutter-internals/results/01_the_scroll_illusion/fixed_height.gif" width="300" alt="Fixed height virtualized list" />
+  <img src="[flutter-internals/results/01_the_scroll_illusion/fixed_height.gif](https://github.com/gupta29470/flutter-internals/tree/master/flutter_internals/results/01_the_scroll_illusion)" width="300" alt="Fixed height virtualized list" />
   &nbsp;&nbsp;&nbsp;
-  <img src="flutter-internals/results/01_the_scroll_illusion/dynamic_height.gif" width="300" alt="Dynamic height virtualized list" />
+  <img src="[flutter-internals/results/01_the_scroll_illusion/dynamic_height.gif](https://github.com/gupta29470/flutter-internals/tree/master/flutter_internals/results/01_the_scroll_illusion)" width="300" alt="Dynamic height virtualized list" />
 </p>
 
 <p align="center">
