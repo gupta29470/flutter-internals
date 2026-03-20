@@ -1,31 +1,80 @@
 # Flutter Internals
 
-Rebuilding Flutter's core systems from scratch to understand how they work.
+Rebuilding Flutter's core systems from scratch to understand how they actually work.
 
 No Slivers. No RenderObjects. Just widgets and first principles.
 
+<br>
 
-## Modules
+---
 
-### 01 - The Scroll Illusion
-Building a virtualized list from scratch.
+## Episode 01 — The Scroll Illusion
 
-**Fixed Height**
-- `visible_range.dart` - Calculate first/last visible indices
-- `virtualized_list.dart` - Stack + Positioned viewport
+**How does `ListView` only render what's on screen?**
 
-**Dynamic Height**
-- `height_cache.dart` - Prefix sums for O(1) position lookup
-- `dynamic_visible_range.dart` - Binary search for visible indices
-- `measuring_size.dart` - Post-frame measurement widget
-- `dynamic_virtualized_list.dart` - Complete implementation
+Built a virtualized list from zero — first with fixed heights (simple math), then dynamic heights (prefix sums + binary search + post-frame measurement).
 
-**Key Concepts**
-- Prefix sums for cumulative heights
-- Binary search on sorted arrays
-- Post-frame callbacks for measurement
-- LayoutBuilder + ScrollController pattern
+<br>
 
+### Demo
+
+<p align="center">
+  <img src="results/01_the_scroll_illusion/fixed_height.gif" width="300" alt="Fixed height virtualized list" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="results/01_the_scroll_illusion/dynamic_height.gif" width="300" alt="Dynamic height virtualized list" />
+</p>
+
+<p align="center">
+  <em>Fixed height</em> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <em>Dynamic height</em>
+</p>
+
+<br>
+
+### What's inside
+
+```
+lib/01_the_scroll_illusion/
+├── fixed_item_height/
+│   ├── step_1_the_math/
+│   │   └── visible_range.dart         → O(1) index calculation via floor/ceil
+│   └── step_2_the_viewport/
+│       └── virtualized_list.dart       → Stack + Positioned, only visible items exist
+│
+└── dynamic_item_height/
+    ├── step_1_height_cache/
+    │   └── height_cache.dart           → Prefix-sum array + binary search (O(log n) lookup)
+    ├── step_2_dynamic_visible_range/
+    │   └── dynamic_visible_range.dart  → Binary search for first index, linear scan for last
+    ├── step_3_measuring_size/
+    │   └── measuring_size.dart         → Post-frame callback to measure real rendered height
+    └── step_4_the_viewport/
+        └── dynamic_virtualized_list.dart → Full implementation: estimate → measure → correct
+```
+
+<br>
+
+### Key concepts
+
+| Concept | How it's used |
+|---|---|
+| **Prefix-sum array** | `HeightCache` stores cumulative heights. O(1) position lookup for any item index. |
+| **Binary search** | Find the first visible item at a scroll offset — O(log n) instead of scanning every item. |
+| **Post-frame measurement** | `MeasuringSize` uses `addPostFrameCallback` to capture real rendered height, then feeds the diff back into the prefix-sum array. |
+| **Estimate → measure → correct** | Dynamic list starts with estimated heights (100px default). As items scroll into view, real heights replace estimates — the list self-corrects. Same pattern Flutter's `SliverList` uses internally. |
+
+<br>
+
+### The trick
+
+Both lists use `SingleChildScrollView` → `SizedBox(height: totalHeight)` → `Stack` with `Positioned` children.
+
+The `SizedBox` creates the full scrollable height (the illusion). Only visible items exist as widgets in the `Stack`. This is essentially `ListView.builder` built from scratch.
+
+**522 lines of Dart. No packages. No shortcuts.**
+
+<br>
+
+---
 
 ## Run
 
@@ -34,18 +83,8 @@ cd flutter_internals
 flutter run
 ```
 
+<br>
 
-## Structure
+## Roadmap
 
-```
-lib/
-└── 01_the_scroll_illusion/
-    ├── fixed_item_height/
-    │   ├── step_1_the_math/
-    │   └── step_2_the_viewport/
-    └── dynamic_item_height/
-        ├── step_1_height_cache/
-        ├── step_2_dynamic_visible_range/
-        ├── step_3_measuring_size/
-        └── step_4_the_viewport/
-```
+More episodes coming — constraints, rendering pipeline, state management, event loop, and more. See [ROADMAP.md](../ROADMAP.md).
