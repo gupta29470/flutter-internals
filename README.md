@@ -19,9 +19,9 @@ Built a virtualized list from zero — first with fixed heights (simple math), t
 ### Demo
 
 <p align="center">
-  <img src="https://github.com/gupta29470/flutter-internals/blob/master/flutter_internals/results/01_the_scroll_illusion/fixed_height.gif" width="300" alt="Fixed height virtualized list" />
+  <img src="https://raw.githubusercontent.com/gupta29470/flutter-internals/master/flutter_internals/results/01_the_scroll_illusion/fixed_height.gif" width="300" alt="Fixed height virtualized list" />
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/gupta29470/flutter-internals/blob/master/flutter_internals/results/01_the_scroll_illusion/dynamic_height.gif" width="300" alt="Dynamic height virtualized list" />
+  <img src="https://raw.githubusercontent.com/gupta29470/flutter-internals/master/flutter_internals/results/01_the_scroll_illusion/dynamic_height.gif" width="300" alt="Dynamic height virtualized list" />
 </p>
 
 <p align="center">
@@ -83,8 +83,4 @@ cd flutter_internals
 flutter run
 ```
 
-<br>
 
-## Roadmap
-
-More episodes coming — constraints, rendering pipeline, state management, event loop, and more. See [ROADMAP.md](../ROADMAP.md).
